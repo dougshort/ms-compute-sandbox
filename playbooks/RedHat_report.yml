@@ -1,0 +1,24 @@
+---
+#ansible-playbook usermaint.yml -l <server group> 
+
+- hosts: all 
+  become: true
+#  gather_facts: False
+
+  tasks:
+
+   - name: Report available security Updates
+     shell: "yum updateinfo list --security > /tmp/patchlist.out"
+     args: 
+       warn: false 
+     register: list_out
+     tags: [ 'patch' ]
+
+#   - debug: var=list_out.stdout_lines
+
+   - name: Fetch Patchlist
+     fetch:
+       src: /tmp/patchlist.out
+       dest: /ansible/Documentation/{{ inventory_hostname }}_patchlist.out
+       flat: yes
+     tags: [ 'patch' ]

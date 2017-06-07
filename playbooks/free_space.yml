@@ -1,0 +1,13 @@
+---
+#ansible-playbook test_book.yml -l test1-servers
+#
+- hosts: all
+  become: true
+
+
+  tasks:
+  - debug: msg=Host is {{ ansible_fqdn }}
+  - name: Run and output free space 
+    command: free -m  
+    register: free_out
+  - debug: var=free_out.stdout_lines 

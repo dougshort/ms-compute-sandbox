@@ -1,0 +1,29 @@
+---
+# file: site.yml
+#
+
+- hosts: all
+  become: true
+
+#  see group_vars/<customer name> to configure customer specific variables
+
+  roles:
+   - epel             # Install Extra Packages for Enterprise Linux
+   - rhui             # Install and configure CBTS RedHat Update Infrastructure
+   - install-packages # Install RHEL packages needed for CBTS Managed services
+   - ops-menu         # Install CBTS ops_menu 
+   - nmon             # Install nmon
+#   - vmware-tools     # Install vmware-tools or open-vmware-tools
+   -  { role: vmware-tools,  when: ansible_virtualization_role == "guest" }
+
+   - ipv6             # Disable ipv6
+   - firewall         # Configure firewall state (ON/OFF)
+   - ntp              # COnfigure Network Time Protocol
+   - snmp             # Configure SNMP
+   - resolv.conf      # Configure DNS resolve.conf file
+   - selinux          # Configure SELinux
+
+##   - rsyslog          #Configure rsyslog host
+   - lumension        # Install Lumension/Heat client
+   - CBTS_accounts    # Add CBTS/CPE managed service accounts
+#   - documentation

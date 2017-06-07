@@ -1,0 +1,27 @@
+---
+   users:
+   - username: mlinden 
+     comment: "Michael Linden <michael.linden@cbts.net>" 
+     uid: 2000 
+     state: present
+
+   - username: dshort 
+     comment: "Doug Short <douglas.short@cbts.net>" 
+     uid: 2001
+     state: present  
+
+   - username: rlapre 
+     comment: "Ray Lapre <ray.lapre@cbts.net>" 
+     uid: 2002
+     state: present
+
+   - username: rnicol 
+     comment: "Roger Nicol <roger.nicol@cbts.net>" 
+     uid: 2003
+     state: present
+
+   - username: jhoevenaar 
+     comment: "Jeff Hoevenaar <jeff.hoevenaar@cbts.net>" 
+     uid: 2004
+     state: present
+

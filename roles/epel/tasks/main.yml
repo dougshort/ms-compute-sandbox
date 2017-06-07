@@ -1,0 +1,27 @@
+---
+# tasks file for epel
+#
+- name: Install epel-release on CentOS
+  yum:
+    name: epel-release
+    state: present
+    enablerepo: extras
+  when: ansible_distribution == "CentOS"
+  tags: [ 'epel' ]
+
+- name: Install epel-release on RHEL
+  yum:
+    name: "{{ epel_url }}"
+    state: present
+  when: ansible_distribution == "RedHat"
+  tags: [ 'epel' ]
+
+- name: Ensure epel-release is enabled
+  ini_file:
+    dest: /etc/yum.repos.d/epel.repo
+    section: epel
+    option: enabled
+    value: 1
+  when: ansible_distribution == "RedHat" or ansible_distribution == "CentOS"
+  tags: [ 'epel' ]
+

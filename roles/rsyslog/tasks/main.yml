@@ -1,0 +1,13 @@
+---
+# tasks file for rsyslog
+
+- name: Configure syslog
+  template:
+    src: rsyslog.d/destinations.conf
+    dest: /etc/rsyslog.d/{{ rsyslog_filename }}
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart rsyslog
+  tags: [ 'rsyslog' ]
+

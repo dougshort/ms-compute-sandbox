@@ -1,0 +1,16 @@
+---
+   users:
+   - username: test1 
+     group: users 
+     comment: "testOne User" 
+     state: absent 
+
+   - username: test2 
+     group: users 
+     comment: "testTwo User" 
+     state: absent 
+
+   - username: test3 
+     group: users 
+     comment: "testThree User" 
+     state: present 

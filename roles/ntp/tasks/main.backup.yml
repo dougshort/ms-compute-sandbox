@@ -1,0 +1,10 @@
+---
+    - name: Configure NTP
+      copy:
+        src: config/ntp.conf
+        dest: /etc/ntp.conf
+        owner: root
+        group: root
+        mode: 0644
+      notify: restart ntpd
+      when: ansible_os_family == 'RedHat' 

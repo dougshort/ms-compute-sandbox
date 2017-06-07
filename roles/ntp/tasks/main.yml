@@ -1,0 +1,43 @@
+---
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags: [ 'ntp' ]
+
+- name: Install NTP.
+  package: name=ntp state=present
+  tags: [ 'ntp' ]
+
+- name: Set the correct timezone.
+  file:
+    src: "/usr/share/zoneinfo/{{ ntp_timezone }}"
+    dest: /etc/localtime
+    state: link
+    force: yes
+  tags: [ 'ntp' ]
+
+# Debian family OSes also have an /etc/timezone file.
+#- name: Set timezone in /etc/timezone file.
+#  template:
+#    src: timezone.j2
+#    dest: /etc/timezone
+#    force: yes
+#  when: ansible_os_family == 'Debian'
+#  tags: [ 'ntp' ]
+
+- stat: path=/etc/ntp.conf
+  register: st
+  tags: [ 'ntp' ]
+
+- name: Generate ntp.conf file
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  notify: restart "{{ ntp_daemon }}" 
+  when: not st.stat.exists
+  tags: [ 'ntp' ]
+
+- name: Ensure NTP is running and enabled as configured.
+  service:
+    name: "{{ ntp_daemon }}"
+    state: started
+    enabled: yes
+  when: ntp_enabled
+  tags: [ 'ntp' ]

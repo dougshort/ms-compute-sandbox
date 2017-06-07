@@ -1,0 +1,9 @@
+---
+# defaults file for CBTS_accounts
+
+group: users
+seuser: yes
+shell: /usr/bin/bash
+remove: yes   # if state=absent then behavior is userdel --remove
+force: yes    # if state=absent then behavior is userdel --remove
+system: yes

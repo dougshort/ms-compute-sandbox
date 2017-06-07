@@ -1,0 +1,30 @@
+---
+
+- hosts: all
+  gather_facts: yes
+  remote_user: cbtsadmin
+  serial: "25%"
+  sudo: yes
+  tasks:
+    - name: Update OpenSSL and OpenSSH (Debian)
+      apt: name={{ item }}
+           state=latest
+           update_cache=yes
+      with_items:
+        - openssl
+        - openssh-client
+        - openssh-server
+      when: ansible_os_family == "Debian"
+
+    - name: Update OpenSSL and OpenSSH (RedHat)
+      yum: name={{ item }}
+           state=latest
+           update_cache=yes
+      with_items:
+        - openssl
+        - openssh-client
+        - openssh-server
+      when: ansible_os_family == "RedHat"
+  post_tasks:
+    - name: Reboot servers
+      command: reboot

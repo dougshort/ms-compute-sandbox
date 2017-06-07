@@ -1,0 +1,23 @@
+---
+
+#ansible-playbook test_book.yml --extra-vars "host=test1-servers"
+
+- hosts: '{{ host }}'
+
+  become: true
+
+  gather_facts: yes
+  serial: "50%"
+  sudo: yes
+  tasks:
+    - name: Update Shellshock (Debian)
+      apt: name=bash
+           state=latest
+           update_cache=yes
+      when: ansible_os_family == "Debian"
+
+    - name: Update Shellshock (RedHat)
+      yum: name=bash
+           state=latest
+           update_cache=yes
+      when: ansible_os_family == "RedHat"

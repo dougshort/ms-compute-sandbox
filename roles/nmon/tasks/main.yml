@@ -1,0 +1,18 @@
+---
+# tasks file for nmon
+
+- name: Check if already installed
+  stat: path=/opt/cbts/msops/bin/nmon
+  register: installed
+  tags: nmon
+ 
+- name: Install NMON
+  copy:
+    src: nmon
+    dest: /opt/cbts/msops/bin/nmon
+    owner: root
+    group: root
+    mode: 0755
+  ignore_errors: true
+  when: not installed.stat.exists 
+  tags: nmon

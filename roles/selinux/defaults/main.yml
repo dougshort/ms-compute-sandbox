@@ -1,0 +1,5 @@
+---
+# defaults file for selinux
+
+selinux_state: permissive # enforcing, permissive, or disabled
+selinux_policy: targeted # required if state is not disabled

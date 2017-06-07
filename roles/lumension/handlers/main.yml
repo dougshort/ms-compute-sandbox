@@ -1,0 +1,7 @@
+---
+# handlers file for lumension
+
+- name: restart_patchagent
+  shell: /usr/local/patchagent/patchservice restart
+  register: result
+  listen: "HEAT PatchLink Agent started"

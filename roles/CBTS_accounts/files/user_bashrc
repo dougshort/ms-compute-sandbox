@@ -1,0 +1,15 @@
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+
+alias "nmon='/opt/cbts/msops/bin/nmon'"
+alias "ops='/opt/cbts/msops/scripts/ops.menu.sh'"
+alias "c='/usr/bin/clear'"
+alias "machinfo='cat /etc/redhat-release; dmidecode --type 1; cat /proc/meminfo | grep MemT; cat /proc/meminfo| grep -i swap; dmidecode -t 4 |grep -E 'Designation|Core|Version''"
+alias "cbts='cd /opt/cbts/'"

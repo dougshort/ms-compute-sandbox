@@ -1,0 +1,88 @@
+---
+# group_vars for mscompute customer (public VDC)
+
+####################
+# FIREWALL
+# default values for firewall
+####################
+#firewall_enabled: no
+#firewall_state: stopped
+
+# Alternate Values
+#firewall_enabled: yes
+#firewall_state: started
+
+####################
+# NTP
+# default values for ntp
+####################
+#ntp_enabled: true
+#ntp_timezone: Etc/UTC
+ntp_timezone: US/Eastern
+#ntp_manage_config: false
+# NTP server area configuration (leave empty for 'Worldwide').
+# See: http://support.ntp.org/bin/view/Servers/NTPPoolServers
+#ntp_area: ''
+#ntp_servers:
+#  - "0{{ ntp_area }}.pool.ntp.org iburst"
+#  - "1{{ ntp_area }}.pool.ntp.org iburst"
+#  - "2{{ ntp_area }}.pool.ntp.org iburst"
+#  - "3{{ ntp_area }}.pool.ntp.org iburst"
+#
+#ntp_restrict:
+#  - "127.0.0.1"
+#  - "::1"
+
+
+####################
+# SNMP
+# defined by cloudforms in public VDC
+# default values for snmp
+####################
+# snmpd_config: true
+# snmpd_enabled: true
+# snmpd_authorized_networks:
+#   - network: <string> <10.0.100.0/24> 
+# snmpd_sysLocation: "Cincinnati"
+# snmpd_sysContact: "CBTS eNOC"
+
+#Sample Alternate values
+#snmpd_authorized_networks: {firs!0013109!r 10.158.159.0/24,
+#                             firs!0013109!r 10.158.143.0/24}
+
+####################
+# RESOLV.CONF (supplied in cloudforms request form)
+# default values for resolv_conf
+####################
+#resolv_conf_nameservers:
+#  - 8.8.8.8
+#  - 8.8.4.4
+#resolv_conf_search_domains:
+#  - "{{ ansible_domain }}"
+#resolv_conf_options:
+#  - rotate
+#  - timeout:1
+#
+
+####################
+# SELINUX
+# defaults file for selinux
+####################
+#selinux_policy: "targeted"
+#selinux_state: "permissive"
+
+# Alternate values
+selinux_policy: "permissive"
+selinux_state: "disabled"
+# OR
+#selinux_policy: "targeted"
+#selinux_state: "enabled"
+
+
+####################
+# SYSLOG
+####################
+
+
+
+

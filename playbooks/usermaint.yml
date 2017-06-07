@@ -1,0 +1,67 @@
+---
+#ansible-playbook usermaint.yml -l <server group> 
+#
+# Pre-reqs
+#create files/<username>.pub with ssh public key
+#create files/users.yml with list of users to add.
+#
+
+- hosts: all 
+  become: true
+
+  tasks:
+   - include_vars: files/users.yml
+   - include_vars: files/password_hash
+
+   - name: Manage user account
+     user: 
+       name: "{{ item.username }}" 
+       group: "{{ item.group }}" 
+       comment: "{{ item.comment }}" 
+#       home: "{{ item.home }}"
+       state: "{{ item.state }}" 
+       password: "{{password}}" 
+       remove: yes
+     register: user_created
+     with_items: '{{users}}'
+     tags:
+     - users
+
+   - name: Force user to change password
+     shell: /usr/bin/chage -d 0 '{{item.username}}'
+     when: user_created and item.state == "present"
+     with_items: '{{users}}'
+     tags:
+     - users
+
+   - name: Setup | authorized key upload
+     authorized_key: user={{ item.username }} key={{ lookup('file', 'files/{{ item.username }}.pub') }}
+     when: user_created and item.state == "present"
+     with_items: '{{users}}'
+     tags:
+      - users
+
+   - name: Add Solaris Prod admin users only
+     user: 
+       name: "{{ item.username }}" 
+       group: "{{ item.group }}" 
+       comment: "{{ item.comment }}" 
+       home: "/export2/home"
+     when: ansible_os_family == "Solaris" and inventory_type == "prod" and item.type == "admin"
+     tags:
+      - users solaris
+
+   - name: Make useraccount non-unix password
+     command: passwd -N user={{ item.username }}
+     with_items: '{{users}}'
+     when: ansible_os_family == "Solaris"
+     tags:
+     - users solaris
+
+   - name: Add user to dr group on production servers {{inventory_type}}
+     command: /usr/sbin/usermod -G +dr myuser
+     with_items: '{{users}}'
+     when: ansible_os_family == "Solaris" and inventory_type == "prod"
+     tags:
+     - users solaris
+

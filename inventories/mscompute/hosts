@@ -1,0 +1,12 @@
+[control]
+rhel7-dshort  ansible_connection=local # Ansible control
+
+[rhel6]
+testbldrhel6
+
+[rhel7]
+testbldrhel7
+
+[mscompute:children]
+rhel6
+rhel7

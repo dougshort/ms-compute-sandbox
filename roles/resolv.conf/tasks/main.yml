@@ -1,0 +1,26 @@
+---
+# tasks file for resolv.conf
+
+#- include: Ubuntu.yml
+#  when: ansible_distribution == "Ubuntu"
+#  tags: [ 'resolv' ]
+
+- name: Set permissions on /etc/resolv.conf to allow write 
+  shell: /usr/bin/chattr -i /etc/resolv.conf
+  when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == '7'
+  tags: [ 'resolv' ]
+
+- name: Create /etc/resolv.conf configuration
+  template: >
+    src=resolv.conf.j2
+    dest=/etc/resolv.conf
+    owner=root
+    group=root
+    mode=0644
+  when: ansible_distribution == 'RedHat' 
+  tags: [ 'resolv' ]
+
+- name: Set permissions on /etc/resolv.conf 
+  shell: /usr/bin/chattr +i /etc/resolv.conf
+  when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == '7'
+  tags: [ 'resolv' ]

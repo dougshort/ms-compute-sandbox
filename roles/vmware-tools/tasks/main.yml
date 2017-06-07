@@ -1,0 +1,43 @@
+---
+# tasks file for vmware_tools
+
+- block:
+  - name: Add the VMware Tools Repository key on RHEL 6
+    rpm_key:
+      key: https://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-RSA-KEY.pub
+      state: present
+    notify: yum-clean-all
+    tags: [ 'vmtools' ]
+
+  - name: Add the VMware Tools Repository on RHEL 6
+    yum_repository:
+      name: vmware-tools
+      description: VMware Tools
+      baseurl: https://packages.vmware.com/tools/esx/latest/rhel6/x86_64/
+      state: present
+      gpgcheck: yes
+      enabled: yes
+    notify: yum-clean-all
+    tags: [ 'vmtools' ]
+
+  - name: Install VMware tools on RHEL 6
+    yum:
+      name: "{{ item }}"
+      state: installed
+    with_items:
+      - vmware-tools-esx-nox
+      - vmware-tools-plugins-deployPkg
+  when:
+   - ansible_distribution == 'RedHat'
+   - ansible_distribution_major_version == '6'
+  tags: [ 'vmtools' ]
+
+- name: Install Open VM Tools tools on RHEL 7
+  yum:
+    name: open-vm-tools
+    state: installed
+  when:
+   - ansible_distribution == 'RedHat'
+   - ansible_distribution_major_version == '7'
+  tags: [ 'vmtools' ]
+

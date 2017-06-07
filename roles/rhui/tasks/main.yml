@@ -1,0 +1,52 @@
+---
+# tasks file for rhui
+
+- name: Add a line to /etc/hosts for RHUI
+  lineinfile:
+    dest: /etc/hosts
+    line: '162.249.246.10 nmslebrhcds01.cbnms.com nmslebrhcds01'
+    state: present
+  when: ansible_distribution == 'RedHat' 
+  tags: [ 'rhui']
+
+- name: Copy RHEL7 rhui rpm to target
+  copy:
+    src: rhui-client-cbtspci-rhel7-2.0-1.noarch.rpm
+    dest: /var/tmp/rhui-client-cbtspci-rhel7-2.0-1.noarch.rpm
+  when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == '7'
+  tags: [ 'rhui']
+
+- name: Install RHEL7 RHUI from RPM
+  yum:
+    name: /var/tmp/rhui-client-cbtspci-rhel7-2.0-1.noarch.rpm
+    state: present
+  when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == '7'
+  register: rhui-rhel7
+  notify: yum-clean-all
+  tags: [ 'rhui']
+
+- name: Copy RHEL6 rhui rpm to target
+  copy:
+    src: rhui-client-cbtspci-rhel6-2.0-1.noarch.rpm
+    dest: /var/tmp/rhui-client-cbtspci-rhel6-2.0-1.noarch.rpm
+  when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == '6'
+  tags: [ 'rhui']
+
+- name: Install RHEL6 RHUI from RPM
+  yum:
+    name: /var/tmp/rhui-client-cbtspci-rhel6-2.0-1.noarch.rpm
+    state: present
+  when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == '6'
+  register: rhui-rhel6
+  notify: yum-clean-all
+  tags: [ 'rhui']
+
+- name: Ensure RHUI is enabled
+  ini_file:
+    dest: /etc/yum.repos.d/rh-cloud.repo
+    section: rhui-rhel-{{ ansible_distribution_major_version }}-server-rhui-rpms
+    option: enabled
+    value: 1
+  when: ansible_distribution == 'RedHat' 
+  tags: [ 'rhui']
+

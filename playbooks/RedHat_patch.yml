@@ -1,0 +1,14 @@
+---
+#ansible-playbook usermaint.yml -l <server group> 
+
+- hosts: all 
+  become: true
+  gather_facts: False
+
+  tasks:
+
+   - name: Install Updates
+     shell: "yum -y --security update --sec-severity=Low"
+     args: 
+       warn: false 
+     tags: [ 'patch' ]

@@ -1,0 +1,44 @@
+---
+# Create Users
+- include_vars: users.yml
+
+- name: Add Users | Create users, shell, home directory
+  user:
+    name: "{{ item.cbts_username }}"
+    password: "{{ item.cbts_password }}"
+    shell: /bin/bash
+    createhome: yes
+    comment: " {{ item.cbts_username }} CBTS Admin Account "
+    group: users
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: " .ssh/id_rsa "
+    append: yes
+    state: present
+    update_password: on_create
+  register: user_mods
+  changed_when: true
+  with_items:
+    - "{{ cbts_users }}"
+  tags: [ 'create_users' ]
+
+- name: Force user to change password on first login
+  command: " chage -d 0 {{ item.name }} "
+  with_items:
+    - "{{ user_mods.results }}"
+  when: "{{ user_mods == true }}"
+  tags: [ 'modify_users' ]
+
+- name: Sudoers | update sudoers file and validate
+  lineinfile:
+    dest: /etc/sudoers
+    backup: yes
+    insertafter: EOF
+    line: "{{ item.cbts_username }}  ALL=(ALL)       NOPASSWD: ALL"
+    regexp: "^{{ item.cbts_username }} .*"
+    state: present
+    validate: "visudo -cf %s"
+  when: "{{ item.use_sudo }} == True"
+  with_items:
+    - "{{ cbts_users }}"
+  tags: [ 'modify_users' ]

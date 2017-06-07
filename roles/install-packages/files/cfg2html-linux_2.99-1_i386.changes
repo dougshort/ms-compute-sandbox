@@ -1,0 +1,32 @@
+Format: 1.8
+Date: Wed, 22 Jul 2015 10:50:00 +0200
+Source: cfg2html-linux
+Binary: cfg2html-linux
+Architecture: source all
+Version: 2.99-1
+Distribution: UNRELEASED
+Urgency: low
+Maintainer: Ralph Roth <cfg2html@hotmail.com>; Michael Meifert <dk3hg@users.sourceforge.net>; Gratien Dhaese <gratien.dhaese@gmail.com>
+Changed-By: ralph <ralph@roth>
+Description: 
+ cfg2html-linux - Collects Linux system configuration into a HTML and text file.
+Changes: 
+ cfg2html-linux (2.99-1) UNRELEASED; urgency=low
+ .
+   * broken dch?
+   * upstream
+   * pacemaker, TOTEM stuff
+   * upstream, backported from cfg2html 6.xx
+   * NOW IN MAINTAINANCE MODE!!!
+Checksums-Sha1: 
+ 8279e4b7ade41b70c50f66091286ea8ae418c30b 899 cfg2html-linux_2.99-1.dsc
+ 5889680ac5991e9f7855f41f7b7b3bf5c021138e 137817 cfg2html-linux_2.99-1.tar.gz
+ 43b89cac1f24964fdb64d884c65a1ab5187fb54b 139340 cfg2html-linux_2.99-1_all.deb
+Checksums-Sha256: 
+ d12a9a3bd594927edeb80f020ba236580f89fe28cf1bc222a1ed69dbf3e26651 899 cfg2html-linux_2.99-1.dsc
+ 6237ad20ecc2766659adc5aa6433be1298d5243dc3cec7ce1ac841301b8be08c 137817 cfg2html-linux_2.99-1.tar.gz
+ 4b16b165f08bc057b6c6999c69fd2d7dd2be4bda586426a6e7e4d190fc8a233b 139340 cfg2html-linux_2.99-1_all.deb
+Files: 
+ e024d74c5095d09357b255c832b7589f 899 admin optional cfg2html-linux_2.99-1.dsc
+ 607b89b2d084c31efd2b5b3a9d92d833 137817 admin optional cfg2html-linux_2.99-1.tar.gz
+ 6692df2468e21cbafe89f7dd90808a5c 139340 admin optional cfg2html-linux_2.99-1_all.deb

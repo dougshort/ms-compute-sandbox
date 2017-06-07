@@ -1,0 +1,23 @@
+---
+# tasks file for firewall
+#
+- name: Configure firewall on RHEL6
+  service:
+    name: iptables
+    enabled: "{{ firewall_enabled }}" 
+    state: "{{ firewall_state }}"
+  become: yes
+  when:
+    - ansible_distribution == 'RedHat' and ansible_distribution_major_version == '6'
+  tags: [ 'firewall' ]
+
+- name: Configure firewall on RHEL7
+  service:
+    name: firewalld
+    enabled: "{{ firewall_enabled }}" 
+    state: "{{ firewall_state }}"
+  become: yes
+  when:
+    - ansible_distribution == 'RedHat' and ansible_distribution_major_version == '7'
+  tags: [ 'firewall' ]
+

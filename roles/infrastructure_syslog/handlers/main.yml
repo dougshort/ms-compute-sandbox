@@ -1,0 +1,7 @@
+---
+# handlers file for infrastructure_syslog
+#
+- name: restart syslog
+  command: service rsyslog restart
+  args:
+    warn: no

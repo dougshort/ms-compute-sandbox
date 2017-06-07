@@ -1,0 +1,85 @@
+---
+# tasks file for lumension
+
+- name: Check if already installed
+  stat: path=/usr/local/patchagent
+  register: installed
+  tags: [ 'lumension' ]
+
+- name: Copy Lumension software to host
+  copy:
+    src: files/UnixPatchAgent.tar
+    dest: /var/tmp/UnixPatchAgent.tar
+    owner: root
+    group: root
+    mode: 0755
+  register: install_lum
+  when: not installed.stat.exists
+  tags: [ 'lumension' ]
+
+- name: Extract Lumension
+  unarchive:
+    src: /var/tmp/UnixPatchAgent.tar
+    dest: /var/tmp
+    remote_src: True
+  when: not installed.stat.exists
+  tags: [ 'lumension' ]
+
+- name: Install Lumension
+  command: /var/tmp/install -silent -d /usr/local -p http://162.249.246.75 -sno D2EC1754-551DBAD7
+  args: 
+    chdir: /var/tmp
+  become: true
+  become_user: root
+  when: not installed.stat.exists
+  tags: [ 'lumension' ]
+
+- name: Create Lumension directory /usr/local/patchagent/tmp
+  file:
+    path: /usr/local/patchagent/tmp
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+    recurse: yes
+  tags: [ 'lumension' ]
+
+#Check and see if update.conf exists
+- stat: path=/usr/local/patchagent/update.conf
+  register: patch_update
+  tags: [ 'lumension' ]
+
+- name: Re-configure Lumension TEMPMACRO destination
+  lineinfile:
+    dest: /usr/local/patchagent/update.conf
+    backup: yes
+    regexp: "^TEMPMACRO"
+    line: 'TEMPMACRO="/usr/local/patchagent/tmp/"' 
+  notify: restart_patchagent
+  when: patch_update 
+  tags: [ 'lumension' ]
+
+#Check to see if yum.conf needs updated
+#This directory "mcescan" is created after lumension discovery,
+#cannot run this check during install.
+
+#- name: test for installonly_limit=4
+#   shell: /bin/cat /usr/local/patchagent/mcescan/etc/yum.conf | grep installonly_limit=4 | wc -l
+#   register: test_grep
+#  tags: [ 'lumension' ]
+
+
+#- name: add line to limit kernel revisions to "4"
+#  shell: /bin/cat /usr/local/patchagent/mcescan/etc/yum.conf | grep installonly_limit=4 | wc -l
+#  register: test_grep
+#  tags: [ 'lumension' ]
+#
+#- name: add line to limit kernel revisions to "4"
+#  lineinfile:
+#    dest: /usr/local/patchagent/mcescan/etc/yum.conf
+#    backup: yes
+#    line: "installonly_limit=4"
+#  when: test_grep.stdout == "0"
+#  tags: [ 'lumension' ]
+
+

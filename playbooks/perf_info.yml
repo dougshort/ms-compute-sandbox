@@ -1,0 +1,26 @@
+---
+#ansible-playbook test_book.yml -l test1-servers
+#
+- hosts: all
+  become: true
+
+
+  tasks:
+  - debug: msg=Host is {{ ansible_fqdn }}
+  - name: Run and output df -h 
+    command: /usr/bin/df -h
+    register: df_out
+    tags:
+      - df
+  - debug: var=df_out.stdout_lines 
+    tags:
+      - df
+
+  - name: Run and output top
+    command: top | head -10
+    register: top_out
+    tags:
+     - top
+  - debug: var1=top_out.stdout_lines
+    tags:
+     - top

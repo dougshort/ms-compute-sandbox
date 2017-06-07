@@ -1,0 +1,64 @@
+---
+# These tasks are only used on Infrastructure Syslog servers - as seen at Noramco
+#
+- name: Modify Remote Syslog Parameters
+  lineinfile:
+    state: present
+    dest: /etc/rsyslog.conf
+    backup: yes
+    regexp: "*.err"
+    line: "*.err;*.debug;*.notice;*.crit;*.emerg;*.info         @syslog1.cbnms.com"
+  notify: restart syslog
+  tags: [ 'rsyslog_config' ]
+
+- name: Add Remote Syslog Parameter
+  lineinfile:
+    state: present
+    dest: /etc/rsyslog.conf
+    backup: yes
+    regexp: '{{ item }}'
+    insertafter: EOF
+    line: '{{ item }}'
+  notify: restart syslog
+  tags: [ 'rsyslog_config' ]
+  with_items:
+    - '*.err;*.debug;*.notice;*.crit;*.emerg;*.info         @syslog2.cbnms.com'
+
+- name: Modify /etc/resolv.conf
+  lineinfile:
+    state: present
+    dest: /etc/resolv.conf
+    backup: yes
+    regexp: "nameserver"
+    line: '{{ item }}'
+  tags: [ 'resolv_conf' ]
+  with_items:
+    - 'nameserver 162.249.246.80'
+    - 'nameserver 162.249.242.80'
+
+- name: Create directory for CBTS scripts
+  file:
+    path: /usr/local/bin
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+    recurse: yes
+  tags: [ 'logger_rotate' ]
+
+- name: Copy syslog_rotate script to target
+  copy:
+    src: syslog_rotate.sh
+    dest: /usr/local/bin/syslog_rotate.sh
+    owner: root
+    group: root
+    mode: 0700
+  tags: [ 'logger_rotate' ]
+
+- name: Create symlink to /etc/cron.daily
+  file:
+    src: /usr/local/bin/syslog_rotate.sh
+    dest: /etc/cron.daily
+    owner: root
+    group: root
+    state: link

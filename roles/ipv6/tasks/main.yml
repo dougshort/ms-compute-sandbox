@@ -1,0 +1,16 @@
+---
+# tasks file for ipv6
+- name: Disable IPV6
+  lineinfile:
+    state: present
+    dest: /etc/sysctl.conf
+    backup: yes
+    regexp: '{{ item }}'
+    insertafter: EOF
+    line: '{{ item }}'
+  with_items:
+    - '# disable ipv6'
+    - 'net.ipv6.conf.all.disable_ipv6=1'
+    - 'net.ipv6.conf.default.disable_ipv6=1'
+  tags: [ 'ipv6' ]
+

@@ -1,0 +1,7 @@
+---
+# created with:
+# python -c "from passlib.hash import sha512_crypt; import getpass; print sha512_crypt.encrypt(getpass.getpass())"
+# Password for new users is "ChangeMe"
+vars:
+    password: $6$rounds=656000$gKROUY.thZXIhrbe$bSdtoHNCkCoQmv7EoyjZWs6sFelKB8cK1aipyUdPqSU1mJx3lMWZad6DAyj3QXNNvtIMRtiJCMnQsUZy/b/pq0
+

@@ -1,0 +1,9 @@
+---
+# defaults file for rsyslog
+
+rsyslog_filename: cbts.conf
+rsyslog_destinations: []
+
+#rsyslog_destinations:
+# - "#*.* @syslog01.ied.cbnms.com"
+# - "#*.* @syslog02.ied.cbnms.com"

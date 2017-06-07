@@ -1,0 +1,36 @@
+# This file was created by CBTS ansible 
+#       sec.name        source          community
+com2sec localhost       127.0.0.1/32    public
+
+{% if snmpd_authorized_networks is defined and snmpd_enable %}
+{%   for item in snmpd_authorized_networks %}
+com2sec rocommunity {{ item }}
+{%   endfor %}
+{% endif %}
+
+group   Local           v1              localhost
+group   Local           v2c             localhost
+group   roGroup         v1              rocommunity
+group   roGroup         v2c             rocommunity
+group   rwGroup         v1              rwcommunity
+group   rwGroup         v2c             rwcommunity
+
+#               incl/excl       subtree         mask
+view    all     included        .1              80
+
+#               context model   level   prefix  read    write   notify (unused)
+access  roGroup ""      any     noauth  exact   all     none    none
+access  rwGroup ""      any     noauth  exact   all     all     none
+
+{% if snmp_sysLocation is defined %}
+sysLocation    {{ snmp_sysLocation }}
+{% endif %}
+{% if snmp_sysContact is defined %}
+sysContact    {{ snmp_sysContact }}
+{% endif %}
+{% if snmp_sysName is defined %}
+sysName     {{ snmp_sysName }}
+{% endif %}
+sysServices    72
+
+dontLogTCPWrappersConnects 1
